@@ -4,6 +4,11 @@ import ec.edu.ups.nuevo_programacion.modelo.Simbolo;
 import ec.edu.ups.nuevo_programacion.controlador.TicTacToe;
 import java.awt.Color;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -152,6 +157,7 @@ public class FormTicTacToe extends javax.swing.JFrame {
         this.mostrarTurno();
         this.actualizarPuntuacion();
         this.inicializarTablero();
+        this.actualizarPuntuacion();
     }
 
     /**
@@ -321,6 +327,7 @@ public class FormTicTacToe extends javax.swing.JFrame {
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         reset();
+        guardarPuntosEnArchivo();
     }//GEN-LAST:event_btnResetActionPerformed
 
     /**
@@ -361,6 +368,32 @@ public class FormTicTacToe extends javax.swing.JFrame {
         });
     }
 
+    private void guardarPuntosEnArchivo() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("puntos.txt"))) {
+            writer.write("Jugador 1 Puntos: " + J1Puntos);
+            writer.newLine();
+            writer.write("Jugador 2 Puntos: " + J2Puntos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void cargarPuntosDesdeArchivo() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("puntos.txt"))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                if (linea.startsWith("Jugador 1 Puntos:")) {
+                    J1Puntos = Integer.parseInt(linea.substring(linea.lastIndexOf(" ") + 1));
+                } else if (linea.startsWith("Jugador 2 Puntos:")) {
+                    J2Puntos = Integer.parseInt(linea.substring(linea.lastIndexOf(" ") + 1));
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            // Maneja la excepción de formato incorrecto o problemas de lectura
+            e.printStackTrace();
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;
     private javax.swing.JLabel jLabel1;
