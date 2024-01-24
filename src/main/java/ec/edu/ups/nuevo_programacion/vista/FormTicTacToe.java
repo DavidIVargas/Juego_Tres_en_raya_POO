@@ -80,7 +80,6 @@ public class FormTicTacToe extends javax.swing.JFrame {
 
     public void elegirPosicion(int i, int j) {
         if (this.juego.getSimboloAt(i, j) == Simbolo.VACIO) {
-
             juego.insertarEn(i, j);
 
             Image img;
@@ -98,16 +97,18 @@ public class FormTicTacToe extends javax.swing.JFrame {
 
             this.tablero[i][j].setIcon(img2);
 
-            // Imprimir el estado del tablero en la consola después de cada movimiento
-            imprimirEstadoTableroConsola();
-
             this.juego.cambiarTurno();
 
             this.mostrarTurno();
 
             if (this.juego.finPartida()) {
+                // Imprime el estado final del tablero en la consola
+                imprimirEstadoTableroConsola();
 
                 Simbolo ganador = juego.ganador();
+
+                // Imprime el resultado de la partida en la consola
+                imprimirResultadoPartida(ganador);
 
                 if (ganador == null) {
                     JOptionPane.showMessageDialog(rootPane, "Empate");
@@ -119,9 +120,7 @@ public class FormTicTacToe extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, "J2 gana");
                 }
                 this.reset();
-
             }
-
         }
     }
 
@@ -133,6 +132,17 @@ public class FormTicTacToe extends javax.swing.JFrame {
                 System.out.print(this.juego.getSimboloAt(i, j).getSimbolo() + " ");
             }
             System.out.println("");
+        }
+    }
+
+    // Agrega este método para imprimir el resultado de la partida en la consola
+    private void imprimirResultadoPartida(Simbolo ganador) {
+        if (ganador == null) {
+            System.out.println("La partida terminó en empate.");
+        } else if (ganador == Simbolo.X) {
+            System.out.println("Jugador 1 (X) gana la partida.");
+        } else {
+            System.out.println("Jugador 2 (O) gana la partida.");
         }
     }
 
